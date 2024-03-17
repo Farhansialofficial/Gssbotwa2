@@ -153,7 +153,7 @@ const hours = Math.floor((uptime % (24 * 3600)) / 3600); // Calculate hours
 const minutes = Math.floor((uptime % 3600) / 60); // Calculate minutes
 const seconds = Math.floor(uptime % 60); // Calculate seconds
 //Uptime
-  const uptimeMessage = `*I am alive now since ${day}D ${hours}H ${minutes}M ${seconds}S*`;
+  const uptimeMessage = `*I am alive now since ${day}d ${hours}h ${minutes}m ${seconds}s*`;
   
   const runMessage = `*☀️ ${day} Day*\n *🕐 ${hours} Hour*\n *⏰ ${minutes} Minimum*\n *⏱️ ${seconds} Seconds*\n`;
   
@@ -500,7 +500,28 @@ if (!('autobio' in setting)) setting.autobio = false
             timezone: "Asia/kolkata"
         })
         
-        
+
+
+async function setBio() {
+    setInterval(async () => {
+        if (db.data.settings[botNumber].autobio) {
+            const date = new Date();
+            const options = {
+                timeZone: 'Asia/Kolkata',
+                hour12: true,
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            };
+            const timeString = moment(date).tz('Asia/Kolkata').format('MM/DD/YYYY ⌚ hh:mm:ss A');
+            const status = `📆 ${timeString} gssbotwa ⚡`;
+            await gss.updateProfileStatus(status).catch(_ => _);
+        }
+    }, 60000);
+}
+
+setBio();
+
 if (mek.key && mek.key.remoteJid === 'status@s.whatsapp.net') {
      gss.readMessages([mek.key]);
 }
@@ -1780,31 +1801,6 @@ case 'anticall': {
     }
 }
 break;
-
-case 'autoabout': case "autobio":
-    if (isBan) return m.reply(mess.banned);
-    if (isBanChat) return m.reply(mess.bangc);
-    if (!isCreator) throw mess.owner;
-
-    let autoAboutStatus = process.env.AUTO_ABOUT || 'true';
-
-    if (!args || args.length < 1) {
-        gss.sendPoll(m.chat, "Choose Auto About Setting:", [`${prefix}autoabout off`, `${prefix}autoabout on`]);
-    } else {
-        if (args[0].toLowerCase() === "on") {
-            if (autoAboutStatus === 'true') return m.reply(`Already Active Before`);
-            process.env.AUTO_ABOUT = 'true';
-            setBio(); 
-            m.reply(`Auto About is now *ON*`);
-        } else if (args[0].toLowerCase() === "off") {
-            if (autoAboutStatus === 'false') return m.reply(`Already Inactive Before`);
-            process.env.AUTO_ABOUT = 'false';
-            m.reply(`Auto About is now *OFF*`);
-        } else {
-            gss.sendPoll(m.chat, "Choose Auto About Setting:", [`${prefix}autoabout off`, `${prefix}autoabout on`]);
-        }
-    }
-    break;
 
 
 
@@ -4178,6 +4174,20 @@ await m.reply(`Please wait...`);
       }
 }
 break;
+
+ case 'autobio':
+                if (isBan) return m.reply(mess.banned);
+        if (isBanChat) return m.reply(mess.bangc);
+        if (!isCreator) throw mess.owner
+                if (args.length < 1) return m.reply(`Example ${prefix + command} on/off`)
+                if (q == 'on') {
+                    db.data.settings[botNumber].autobio = true
+                    m.reply(`Successfully Changed AutoBio To ${q}`)
+                } else if (q == 'off') {
+                    db.data.settings[botNumber].autobio = false
+                    m.reply(`Successfully Changed AutoBio To ${q}`)
+                }
+            break
 
  case 'gitclone':
    if (isBan) return m.reply(mess.banned);
