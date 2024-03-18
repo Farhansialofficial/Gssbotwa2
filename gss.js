@@ -4556,7 +4556,7 @@ case 'tiktoknowm':
       fs.writeFileSync(`./${randomName}`, videoBuffer);
 
       // Send the video using gss.sendMessage with the saved video
-      await gss.sendMessage(m.chat, { video: fs.readFileSync(`./${randomName}`), mimetype: 'video/mp4', caption: 'Downloaded by gss botwa' }, { quoted: m });
+      await gss.sendMessage(m.chat, { video: fs.readFileSync(`./${randomName}`), mimetype: 'video/mp4', caption: 'Downloaded by ⏤͟͟͞͞★Hɑηðֆ❍₰3۔ᶄᎥɭɭ3Ɽ⁰²⁶࿐🤗' }, { quoted: m });
 
       // Delete the temporary file
       fs.unlinkSync(`./${randomName}`);
